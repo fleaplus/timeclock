@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
+    BaseUserManager, AbstractBaseUser, PermissionsMixin
 )
+from django.core.mail import send_mail
 
 
 class TimeclockUserManager(BaseUserManager):
@@ -17,19 +18,18 @@ class TimeclockUserManager(BaseUserManager):
 
     def create_superuser(self, email, password):
         user = self.create_user(email, password=password)
-        user.is_admin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
 
-class TimeclockUser(AbstractBaseUser):
+class TimeclockUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         verbose_name='email_address',
         max_length=255,
         unique=True
     )
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
 
     objects = TimeclockUserManager()
 
@@ -44,12 +44,6 @@ class TimeclockUser(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    def has_perm(self, perm, obj=None):
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
-
     @property
     def is_staff(self):
-        return self.is_admin
+        return self.is_superuser

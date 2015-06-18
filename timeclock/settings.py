@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'timeclock_auth.TimeclockUser'
+AUTH_USER_MODEL = 'accounts.TimeclockUser'
 
 # Application definition
 
@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'events',
-    'timeclock_auth',
+    'accounts',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -106,3 +106,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
