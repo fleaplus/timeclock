@@ -1,35 +1,11 @@
-from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm
 from django.utils.crypto import get_random_string
 
 from .models import TimeclockUser
-
-
-class UserCreationForm(forms.ModelForm):
-
-    class Meta:
-        model = TimeclockUser
-        fields = ('email',)
-
-    def save(self, commit=True):
-        user = super(UserCreationForm, self).save(commit=False)
-        if commit:
-            user.save()
-        return user
-
-
-class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField()
-
-    class Meta:
-        model = TimeclockUser
-        fields = ('email', 'password', 'is_active', 'is_superuser')
-
-    def clean_password(self):
-        return self.initial["password"]
+from .forms import UserChangeForm, UserCreationForm
 
 
 class TimeclockUserAdmin(UserAdmin):
