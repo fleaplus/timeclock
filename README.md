@@ -2,9 +2,7 @@
 
 This is a timeclock app.
 
-LICENSE: Detachable Public License
-
-No, just kidding.  It's closed source.
+LICENSE: Detachable Public License  (see LICENSE file)
 
 ## Settings
 
