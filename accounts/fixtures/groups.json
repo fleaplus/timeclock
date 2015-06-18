@@ -1,0 +1,20 @@
+[
+{
+  "model": "auth.group",
+  "fields": {
+    "permissions": [
+      [
+        "add_event",
+        "events",
+        "event"
+      ],
+      [
+        "change_event",
+        "events",
+        "event"
+      ]
+    ],
+    "name": "Employee"
+  }
+}
+]
