@@ -32,15 +32,15 @@ AUTH_USER_MODEL = 'accounts.TimeclockUser'
 # Application definition
 
 INSTALLED_APPS = (
+    'accounts',
+    'events',
+    'static_precompiler',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'events',
-    'accounts',
-    'static_precompiler',
 )
 
 MIDDLEWARE_CLASSES = (

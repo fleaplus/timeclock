@@ -1,33 +1,34 @@
-{% extends "admin/base_site.html" %}
-{% load i18n %}
-
-{% block breadcrumbs %}
-<div class="breadcrumbs">
-<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
-&rsaquo; {% trans 'Account confirmation' %}
-</div>
-{% endblock %}
-
-{% block title %}{% trans 'Confirm your account' %}{% endblock %}
-{% block content_title %}<h1>{% trans 'Confirm your account' %}</h1>{% endblock %}
+{% extends "base.html" %}
 {% block content %}
+    <h1>Confirm your account</h1>
 
-{% if validlink %}
+    {% if validlink %}
+        <p>Please enter and confirm a password to begin using the system.</p>
 
-<p>{% trans "Please enter and confirm a password to begin using the system." %}</p>
+        <form action="" method="post" class="uk-form uk-form-horizontal">
+            {% csrf_token %}
+            {{ form.new_password1.errors }}
+            <div class="uk-form-row">
+                <label for="id_new_password1" class="uk-form-label">New password:</label>
+                <div class="uk-form-controls">
+                    {{ form.new_password1 }}
+                </div>
+            </div>
+            {{ form.new_password2.errors }}
+            <div class="uk-form-row">
+                <label for="id_new_password2" class="uk-form-label">Confirm password:</label>
+                <div class="uk-form-controls">
+                    {{ form.new_password2 }}
+                </div>
+            </div>
+            <div class="uk-form-row">
+                <div class="uk-form-controls">
+                    <button type="submit" class="uk-button uk-button-primary">Confirm my account</button>
+                </div>
+            </div>
+        </form>
 
-<form action="" method="post">{% csrf_token %}
-{{ form.new_password1.errors }}
-<p class="aligned wide"><label for="id_new_password1">{% trans 'New password:' %}</label>{{ form.new_password1 }}</p>
-{{ form.new_password2.errors }}
-<p class="aligned wide"><label for="id_new_password2">{% trans 'Confirm password:' %}</label>{{ form.new_password2 }}</p>
-<p><input type="submit" value="{% trans 'Change my password' %}" /></p>
-</form>
-
-{% else %}
-
-<p>{% trans "The account confirmation link was invalid, possibly because it has already been used.  Please request an account reset." %}</p>
-
-{% endif %}
-
+    {% else %}
+        <p>The account confirmation link was invalid, possibly because it has already been used.  Please request an account reset.</p>
+    {% endif %}
 {% endblock %}
