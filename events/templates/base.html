@@ -1,25 +1,21 @@
 {% load compile_static %}
 <!DOCTYPE html>
 <html lang="en-gb" dir="ltr">
-
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Timeclock</title>
         <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
         <link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon.png">
-        <link id="data-uikit-theme" rel="stylesheet" href="/static/{% compile 'less/uikit.less' %}">
-        <script src="/static/js/jquery-1.11.3.min.js"></script>
-        <script src="/static/js/uikit.min.js"></script>
-        <script src="/static/js/components/autocomplete.js"></script>
-        <script src="/static/js/components/datepicker.js"></script>
-        <script src="/static/js/components/timepicker.js"></script>
+        <link id="data-uikit-theme" rel="stylesheet" href="{{ STATIC_URL }}{% compile 'less/uikit.less' %}">
+        <script src="{{ STATIC_URL }}js/jquery-1.11.3.min.js"></script>
+        <script src="{{ STATIC_URL }}js/uikit.min.js"></script>
+        <script src="{{ STATIC_URL }}js/components/autocomplete.js"></script>
+        <script src="{{ STATIC_URL }}js/components/datepicker.js"></script>
+        <script src="{{ STATIC_URL }}js/components/timepicker.js"></script>
     </head>
-
     <body>
-
         <div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
-
             <nav class="uk-navbar uk-margin-large-bottom">
                 <a class="uk-navbar-brand uk-hidden-small" href="layouts_frontpage.html">Timeclock</a>
                 <ul class="uk-navbar-nav uk-hidden-small">
@@ -39,10 +35,9 @@
 
             <div class="uk-grid" data-uk-grid-margin>
                 <div class="uk-width-1-1">
-                {% block content %}{% endblock content %}
+                    {% block content %}{% endblock content %}
                 </div>
             </div>
-
         </div>
 
         <div id="offcanvas" class="uk-offcanvas">
@@ -60,6 +55,5 @@
                 </ul>
             </div>
         </div>
-
     </body>
 </html>
