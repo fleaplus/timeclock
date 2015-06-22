@@ -8,4 +8,4 @@ def account_confirm(request, uidb64=None, token=None):
 		template_name='account_confirmation_form.html',
 		uidb64=uidb64,
 		token=token,
-		post_reset_redirect='/')
+		post_reset_redirect='/events/new/')

@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>Create new Event</h1>
+    <p>for <strong>{{ user }}</strong></p>
     <form class="uk-form" action="" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="uk-button uk-button-primary">Punch it!</button>
+        <label>Time:</label>
+        {{ form.time }}
+        <button type="submit" class="uk-button uk-button-primary uk-button-large">Punch it!</button>
     </form>
 {% endblock content %}

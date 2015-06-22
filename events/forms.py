@@ -11,8 +11,8 @@ class UikitSplitDateTimeWidget(MultiWidget):
     supports_microseconds = False
 
     def __init__(self, attrs={}, date_format=None, time_format=None):
-        widgets = (DateInput(attrs=dict({'data-uk-datepicker': "{format:'YYYY-MM-DD'}"}, **attrs), format=date_format),
-                   TimeInput(attrs=dict({'data-uk-timepicker': ""}, **attrs), format='%H:%M'))
+        widgets = (DateInput(attrs=dict({'data-uk-datepicker': "{format:'YYYY-MM-DD'}", 'class': 'uk-form-large uk-form-width-small'}, **attrs), format=date_format),
+                   TimeInput(attrs=dict({'data-uk-timepicker': "", 'class': 'uk-form-large uk-form-width-small'}, **attrs), format='%H:%M'))
         super().__init__(widgets, attrs)
 
     def decompress(self, value):
