@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
+from django.views.generic import ListView
 from django.core.urlresolvers import reverse_lazy
 from django.utils import timezone
 from django.http.response import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
-from .models import Event
+from .models import Event, Period
 from .forms import EventForm
 
 from accounts.models import TimeclockUser
@@ -41,3 +42,7 @@ class EventCreate(LoginRequiredMixin, CreateView):
         event.save()
 
         return HttpResponseRedirect(self.success_url)
+
+
+class PeriodIndex(ListView):
+    model = Period
