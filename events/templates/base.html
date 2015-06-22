@@ -29,10 +29,14 @@
                 <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav uk-hidden-small">
                         {% if user.is_staff %}
-                            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                            <li>
+                                <a href="{% url 'admin:index' %}">Admin</a>
+                            </li>
                         {% endif %}
                         {% if user.is_authenticated %}
-                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                            <li>
+                                <a href="{% url 'logout' %}">Logout</a>
+                            </li>
                         {% else %}
                             <li>
                                 <a href="{% url 'login' %}">Login</a>
@@ -60,9 +64,20 @@
                     <li>
                         <a href="layouts_portfolio.html">Reports</a>
                     </li>
-                    <li>
-                        <a href="layouts_login.html">Login</a>
-                    </li>
+                    {% if user.is_staff %}
+                        <li>
+                            <a href="{% url 'admin:index' %}">Admin</a>
+                        </li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'login' %}">Login</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
