@@ -12,7 +12,7 @@ class UikitSplitDateTimeWidget(MultiWidget):
 
     def __init__(self, attrs={}, date_format=None, time_format=None):
         widgets = (DateInput(attrs=dict({'data-uk-datepicker': "{format:'YYYY-MM-DD'}"}, **attrs), format=date_format),
-                   TimeInput(attrs=dict({'data-uk-timepicker': ""}, **attrs), format=time_format))
+                   TimeInput(attrs=dict({'data-uk-timepicker': ""}, **attrs), format='%H:%M'))
         super().__init__(widgets, attrs)
 
     def decompress(self, value):

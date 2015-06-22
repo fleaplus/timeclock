@@ -23,10 +23,34 @@ class EventModelTestCase(TestCase):
 
 class EventCreateViewTestCase(TestCase):
 
-    def test_new_event_view(self):
-        employee = EmployeeFactory()
+    def setUp(self):
+        self.employee = EmployeeFactory()
+        self.client.login(username=self.employee.email, password='password')
 
-        self.client.login(username=employee.email, password='password')
+    def test_get(self):
         r = self.client.get('/events/new/')
 
         self.assertEqual(r.status_code, 200)
+
+    def test_get_sets_default_time(self):
+        r = self.client.get('/events/new/')
+
+        self.assertEqual(r.context['form']['time'].value(), timezone.now().replace(second=0, microsecond=0))
+
+    def test_post(self):
+        r = self.client.post('/events/new/', {'time_0': '2015-01-01', 'time_1': '01:01:01'})
+
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(Event.objects.count(), 1)
+
+    def test_get_requires_user_to_be_logged_in(self):
+        self.client.logout()
+
+        r = self.client.get('/events/new/')
+
+        self.assertRedirects(r, '/accounts/login/?next=/events/new/', fetch_redirect_response=False)
+
+    def test_post_sets_user_to_current_user(self):
+        r = self.client.post('/events/new/', {'time_0': '2015-01-01', 'time_1': '01:01:01'})
+
+        self.assertEqual(Event.objects.last().user, self.employee)
