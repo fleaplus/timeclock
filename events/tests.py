@@ -101,6 +101,19 @@ class EventCreateViewTestCase(TestCase):
 
         self.assertEqual(r.status_code, 200)
 
+    def test_get_sets_billable_to_false(self):
+        event = EventFactory(user=self.employee)
+        period = PeriodFactory(user=self.employee, start=event, completed=False, billable=False)
+
+        r = self.client.get('/events/new/')
+
+        self.assertEqual(r.context['form']['billable'].value(), False)
+
+    def test_get_sets_billable_to_true(self):
+        r = self.client.get('/events/new/')
+
+        self.assertEqual(r.context['form']['billable'].value(), True)
+
     def test_get_sets_default_time(self):
         r = self.client.get('/events/new/')
 
