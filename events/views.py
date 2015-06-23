@@ -27,9 +27,15 @@ class EventCreate(LoginRequiredMixin, CreateView):
     def get_initial(self):
         """
         Prepopulates date and time with current values for new event creation
+        Prepopulates billable with the incomplete period's setting
         """
         initial = super().get_initial()
 
+        try:
+            billable = Period.objects.get(user=self.request.user, completed=False).billable
+        except Period.DoesNotExist:
+            billable = True
+        initial['billable'] = billable
         initial['time'] = timezone.now().replace(second=0, microsecond=0)
         return initial
 

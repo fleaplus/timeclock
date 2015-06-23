@@ -24,7 +24,7 @@ class UikitSplitDateTimeWidget(MultiWidget):
 
 class EventForm(ModelForm):
     time = SplitDateTimeField(widget=UikitSplitDateTimeWidget)
-    billable = BooleanField(required=False, initial=True)
+    billable = BooleanField(required=False)
 
     class Meta:
         model = Event
