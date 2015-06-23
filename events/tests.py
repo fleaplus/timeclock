@@ -37,6 +37,37 @@ class PeriodModelTestCase(TestCase):
         self.assertEqual(period.start, event1)
         self.assertEqual(period.end, event2)
 
+    def test_can_be_completed(self):
+        PeriodFactory(completed=True)
+
+        self.assertTrue(Period.objects.last().completed)
+
+    def test_event_occurred_start(self):
+        employee = EmployeeFactory()
+        event = EventFactory(user=employee)
+        Period.objects.last().delete()
+
+        Period.objects.event_occurred(event)
+
+        period = Period.objects.last()
+
+        self.assertEqual(period.start, event)
+        self.assertEqual(period.end, None)
+
+    def test_event_occurred_end(self):
+        employee = EmployeeFactory()
+        event_start = EventFactory(user=employee)
+        event_end = EventFactory(user=employee)
+        Period.objects.all().delete()
+        PeriodFactory(user=employee, start=event_start, end=None, completed=False)
+
+        Period.objects.event_occurred(event_end)
+
+        period = Period.objects.last()
+
+        self.assertEqual(period.end, event_end)
+        self.assertTrue(period.completed)
+
 
 class EventCreateViewTestCase(TestCase):
 

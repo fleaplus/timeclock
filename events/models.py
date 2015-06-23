@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.exceptions import ValidationError
 
 from accounts.models import TimeclockUser
 
@@ -12,22 +11,32 @@ class Event(models.Model):
         return str(self.time)
 
     def save(self, *args, **kwargs):
-        last_event = Event.objects.filter(user=self.user).last()
         super().save(*args, **kwargs)
-        if last_event and not last_event.start.count() and not last_event.end.count():
-            Period(user=self.user, start=last_event, end=self).save()
+        Period.objects.event_occurred(self)
+
+
+class PeriodManager(models.Manager):
+    def event_occurred(self, event):
+        """
+        Update the user's incomplete period
+        """
+        period, created = Period.objects.get_or_create(user=event.user, completed=False)
+
+        if created:
+            period.start = event
+        else:
+            period.end = event
+            period.completed = True
+        period.save()
 
 
 class Period(models.Model):
     user = models.ForeignKey(TimeclockUser)
-    start = models.ForeignKey(Event, related_name='start')
-    end = models.ForeignKey(Event, related_name='end')
+    start = models.ForeignKey(Event, related_name='start', null=True)
+    end = models.ForeignKey(Event, related_name='end', null=True)
+    completed = models.BooleanField(default=True)
 
-    def save(self, *args, **kwargs):
-        if self.start.user == self.user and self.end.user == self.user:
-            return super().save(*args, **kwargs)
-        else:
-            raise ValidationError('Event user must match period user.')
+    objects = PeriodManager()
 
     @property
     def duration(self):
