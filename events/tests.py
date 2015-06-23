@@ -44,6 +44,11 @@ class PeriodModelTestCase(TestCase):
 
         self.assertTrue(Period.objects.last().completed)
 
+    def test_can_be_billable(self):
+        PeriodFactory(billable=True)
+
+        self.assertTrue(Period.objects.last().billable)
+
     def test_event_occurred_start(self):
         employee = EmployeeFactory()
         event = EventFactory(user=employee)
@@ -118,6 +123,11 @@ class EventCreateViewTestCase(TestCase):
         r = self.client.post('/events/new/', {'time_0': '2015-01-01', 'time_1': '01:01:01'})
 
         self.assertEqual(Event.objects.last().user, self.employee)
+
+    def test_post_billable_period(self):
+        r = self.client.post('/events/new/', {'time_0': '2015-01-01', 'time_1': '01:01:01', 'billable': 'False'})
+
+        self.assertEqual(Period.objects.last().billable, False)
 
 
 class PeriodListViewTestCase(TestCase):

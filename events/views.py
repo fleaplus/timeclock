@@ -39,7 +39,7 @@ class EventCreate(LoginRequiredMixin, CreateView):
         """
         event = form.save(commit=False)
         event.user = TimeclockUser.objects.get(email=self.request.user)
-        event.save()
+        event.save(billable=form.cleaned_data['billable'])
 
         return HttpResponseRedirect(self.success_url)
 

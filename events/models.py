@@ -15,12 +15,13 @@ class Event(models.Model):
         super().save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
+        billable = kwargs.pop('billable', True)
         super().save(*args, **kwargs)
-        Period.objects.event_occurred(self)
+        Period.objects.event_occurred(self, billable=billable)
 
 
 class PeriodManager(models.Manager):
-    def event_occurred(self, event):
+    def event_occurred(self, event, billable=True):
         """
         Update the user's incomplete period
         """
@@ -31,6 +32,7 @@ class PeriodManager(models.Manager):
         else:
             period.end = event
             period.completed = True
+        period.billable = billable
         period.save()
 
 
@@ -39,6 +41,7 @@ class Period(models.Model):
     start = models.ForeignKey(Event, related_name='start', null=True)
     end = models.ForeignKey(Event, related_name='end', null=True)
     completed = models.BooleanField(default=True)
+    billable = models.BooleanField(default=True)
 
     objects = PeriodManager()
 
