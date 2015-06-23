@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
+from django.views.generic import ListView
 from django.core.urlresolvers import reverse_lazy
 from django.utils import timezone
 from django.http.response import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
-from .models import Event
+from .models import Event, Period
 from .forms import EventForm
 
 from accounts.models import TimeclockUser
@@ -26,9 +27,15 @@ class EventCreate(LoginRequiredMixin, CreateView):
     def get_initial(self):
         """
         Prepopulates date and time with current values for new event creation
+        Prepopulates billable with the incomplete period's setting
         """
         initial = super().get_initial()
 
+        try:
+            billable = Period.objects.get(user=self.request.user, completed=False).billable
+        except Period.DoesNotExist:
+            billable = True
+        initial['billable'] = billable
         initial['time'] = timezone.now().replace(second=0, microsecond=0)
         return initial
 
@@ -38,6 +45,10 @@ class EventCreate(LoginRequiredMixin, CreateView):
         """
         event = form.save(commit=False)
         event.user = TimeclockUser.objects.get(email=self.request.user)
-        event.save()
+        event.save(billable=form.cleaned_data['billable'])
 
         return HttpResponseRedirect(self.success_url)
+
+
+class PeriodIndex(ListView):
+    model = Period

@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% load timedelta %}
+{% block content %}
+    <h1>Periods</h1>
+
+    <table class="uk-table">
+        <thead>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Hours</th>
+            <th>Billable</th>
+        </thead>
+        <tbody>
+            {% for period in period_list %}
+                <tr>
+                    <td>{{ period.start.time|date:"DATETIME_FORMAT" }}</td>
+                    <td>{{ period.end.time|date:"DATETIME_FORMAT" }}</td>
+                    <td>{{ period.duration|in_hours|floatformat:"2" }}</td>
+                    <td>{{ period.billable }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

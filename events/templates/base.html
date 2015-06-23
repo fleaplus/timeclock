@@ -20,10 +20,10 @@
                 <a class="uk-navbar-brand uk-hidden-small" href="layouts_frontpage.html">Timeclock</a>
                 <ul class="uk-navbar-nav uk-hidden-small">
                     <li>
-                        <a href="layouts_frontpage.html">Events</a>
+                        <a href="{% url 'new_event' %}">Events</a>
                     </li>
                     <li>
-                        <a href="layouts_portfolio.html">Reports</a>
+                        <a href="{% url 'periods_index' %}">Periods</a>
                     </li>
                 </ul>
                 <div class="uk-navbar-flip">
@@ -59,10 +59,10 @@
             <div class="uk-offcanvas-bar">
                 <ul class="uk-nav uk-nav-offcanvas">
                     <li>
-                        <a href="layouts_frontpage.html">Events</a>
+                        <a href="{% url 'new_event' %}">Events</a>
                     </li>
                     <li>
-                        <a href="layouts_portfolio.html">Reports</a>
+                        <a href="{% url 'periods_index' %}">Periods</a>
                     </li>
                     {% if user.is_staff %}
                         <li>

@@ -1,4 +1,4 @@
-from django.forms import ModelForm, SplitDateTimeField, MultiWidget, DateInput, TimeInput
+from django.forms import ModelForm, SplitDateTimeField, BooleanField, MultiWidget, DateInput, TimeInput
 from django.forms.utils import to_current_timezone
 
 from .models import Event
@@ -24,7 +24,8 @@ class UikitSplitDateTimeWidget(MultiWidget):
 
 class EventForm(ModelForm):
     time = SplitDateTimeField(widget=UikitSplitDateTimeWidget)
+    billable = BooleanField(required=False)
 
     class Meta:
         model = Event
-        fields = ['time']
+        fields = ['time', 'billable']
