@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.test import TestCase
 from django.utils import timezone
 from django.core.urlresolvers import reverse
@@ -28,8 +30,8 @@ class PeriodModelTestCase(TestCase):
 
     def test_create(self):
         employee = EmployeeFactory()
-        event1 = EventFactory(user=employee)
-        event2 = EventFactory(user=employee)
+        event1 = Event.objects.create(user=employee, time=timezone.now())
+        event2 = Event.objects.create(user=employee, time=timezone.now())
 
         self.assertEqual(Period.objects.count(), 1)
         period = Period.objects.last()
@@ -45,7 +47,6 @@ class PeriodModelTestCase(TestCase):
     def test_event_occurred_start(self):
         employee = EmployeeFactory()
         event = EventFactory(user=employee)
-        Period.objects.last().delete()
 
         Period.objects.event_occurred(event)
 
@@ -58,7 +59,6 @@ class PeriodModelTestCase(TestCase):
         employee = EmployeeFactory()
         event_start = EventFactory(user=employee)
         event_end = EventFactory(user=employee)
-        Period.objects.all().delete()
         PeriodFactory(user=employee, start=event_start, end=None, completed=False)
 
         Period.objects.event_occurred(event_end)
@@ -68,6 +68,22 @@ class PeriodModelTestCase(TestCase):
         self.assertEqual(period.end, event_end)
         self.assertTrue(period.completed)
 
+    def test_duration_for_completed_period(self):
+        employee = EmployeeFactory()
+        event_start = EventFactory(user=employee, time=timezone.now() - timedelta(hours=1))
+        event_end = EventFactory(user=employee, time=timezone.now())
+
+        period = PeriodFactory(user=employee, start=event_start, end=event_end)
+
+        self.assertAlmostEqual(period.duration.total_seconds(), 3600, places=0)
+
+    def test_duration_for_incomplete_period(self):
+        employee = EmployeeFactory()
+        event_start = EventFactory(user=employee, time=timezone.now() - timedelta(hours=1))
+
+        period = PeriodFactory(user=employee, start=event_start, end=None, completed=False)
+
+        self.assertAlmostEqual(period.duration.total_seconds(), 3600, places=0)
 
 class EventCreateViewTestCase(TestCase):
 

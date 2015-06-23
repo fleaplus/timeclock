@@ -15,6 +15,12 @@ class EventFactory(factory.django.DjangoModelFactory):
     time = timezone.now()
     user = factory.SubFactory(EmployeeFactory)
 
+    @classmethod
+    def _create(cls, model_class, *args, **kwargs):
+        obj = model_class(*args, **kwargs)
+        obj.save_without_period_update()
+        return obj
+
 
 class PeriodFactory(factory.django.DjangoModelFactory):
     class Meta:

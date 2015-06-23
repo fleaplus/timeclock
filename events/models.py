@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from accounts.models import TimeclockUser
 
@@ -9,6 +10,9 @@ class Event(models.Model):
 
     def __str__(self):
         return str(self.time)
+
+    def save_without_period_update(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -40,4 +44,7 @@ class Period(models.Model):
 
     @property
     def duration(self):
-        return (self.end.time - self.start.time)
+        if self.end:
+            return (self.end.time - self.start.time)
+        else:
+            return (timezone.now() - self.start.time)
